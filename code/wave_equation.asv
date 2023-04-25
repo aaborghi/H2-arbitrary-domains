@@ -1,5 +1,5 @@
 clear; clc;
-rng(4)
+rng(123)
 
 %% Constructing the discretized wave equation
 nx = 5000;
@@ -42,11 +42,11 @@ init = 0.03 + 100i*randn(r,1);
 [Ar,Br,Cr,s] = algorithm1(AA,BB,CC,r,@phi,init,maxiter);
 
 %% Computing systems output trajectories
-dynamics = @(t,x,A,B) A*x+B*sin(1.5*pi*t);
+dynamics = @(t,x,A,B) A*x+B*sin(1*pi*t);
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
-[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(n,1),opts,AA,BB);
+[t1,x] = ode23(dynamics,[0,10],zeros(n,1),opts,AA,BB);
 y1 = CC*x';
-[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),opts,Ar,Br);
+[t2,xr] = ode23(dynamics,linspace(0,10,5000),zeros(r,1),opts,Ar,Br);
 y2 = Cr*xr';
 y3 = y1-y2;
 
