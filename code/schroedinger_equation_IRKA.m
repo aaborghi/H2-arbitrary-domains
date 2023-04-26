@@ -58,5 +58,5 @@ plot(t2,abs(y3),'k', 'Linewidth', 1.5)
 ylim([0,0.15])
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
+legend('$|y(t)-\hat{y}_r(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
 xlabel('time [s]','fontsize',20,'interpreter','latex')

@@ -36,18 +36,17 @@ r = 20;
 maxiter = 100;
 R = 1+1e-6;
 M = 1.5e4;
-c = -1e-3;
+c = -5e-3;
 n = size(AA,1);
-init = 0.03 + 100i*randn(r,1);
+init = 0.1 + 100i*randn(r,1);
 [Ar,Br,Cr,s] = algorithm1(AA,BB,CC,r,@phi,init,maxiter);
 
 %% Computing systems output trajectories
 dynamics = @(t,x,A,B) A*x+B*sin(1.5*pi*t);
-opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
-[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(n,1),opts,AA,BB);
+[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(n,1),[],AA,BB);
 y1 = CC*x';
-[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),opts,Ar,Br);
-y2 = Cr*xr';
+[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
+y2 = Cr*conj(xr');
 y3 = y1-y2;
 
 %% Plots
@@ -58,17 +57,17 @@ plot(t1,real(y1),'r-', 'Linewidth', 3); hold on
 plot(t2,real(y2),'b--', 'Linewidth', 3); hold off
 ax = gca;
 ax.FontSize = 14; 
-legend('$y(t)$','$\widehat{y}_r(t)$','fontsize',20, 'interpreter','latex', 'Location', 'northeast')
+legend('$y(t)$','$\widehat{y}_r(t)$','fontsize',20, 'interpreter','latex', 'Location', 'southwest')
 subplot(2,1,2)
 plot(t2,abs(real(y3)),'k', 'Linewidth', 1.5)
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
+legend('$|y(t)-\widehat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
 
 
 %% Function for the computation of the interpolation points
-% This resembles function \phi used to compute the interpolation points for
-% systems with poles inside a Bernstein ellipse
+% This function is equal to \phi used to compute the interpolation points 
+% for systems with poles inside a Bernstein ellipse
 function snew = phi(s)
             R = 1+1e-6;
             M = 1.5e4;

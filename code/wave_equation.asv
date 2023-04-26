@@ -1,5 +1,5 @@
 clear; clc;
-rng(123)
+rng(4)
 
 %% Constructing the discretized wave equation
 nx = 5000;
@@ -32,21 +32,20 @@ CC = [C,zeros(1,nx)];
 II = speye(2*nx);
 
 %% Running Algorithm1
-r = 20;
+r = 15;
 maxiter = 100;
 R = 1+1e-6;
 M = 1.5e4;
-c = -1e-3;
+c = -5e-3;
 n = size(AA,1);
-init = 0.03 + 100i*randn(r,1);
+init = 0.1 + 100i*randn(r,1);
 [Ar,Br,Cr,s] = algorithm1(AA,BB,CC,r,@phi,init,maxiter);
 
 %% Computing systems output trajectories
-dynamics = @(t,x,A,B) A*x+B*sin(1*pi*t);
-opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
-[t1,x] = ode23(dynamics,[0,10],zeros(n,1),opts,AA,BB);
+dynamics = @(t,x,A,B) A*x+B*sin(1.5*pi*t);
+[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(n,1),[],AA,BB);
 y1 = CC*x';
-[t2,xr] = ode23(dynamics,linspace(0,10,5000),zeros(r,1),opts,Ar,Br);
+[t2,xr] = ode23(dynamics,linspace(0,5,1000),1e-3*ones(r,1),[],Ar,Br);
 y2 = Cr*xr';
 y3 = y1-y2;
 
@@ -63,7 +62,7 @@ subplot(2,1,2)
 plot(t2,abs(real(y3)),'k', 'Linewidth', 1.5)
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
+legend('$|y(t)-\widehat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
 
 
 %% Function for the computation of the interpolation points
