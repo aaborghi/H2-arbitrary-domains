@@ -30,27 +30,43 @@ phi = @(z) (conj(z));
 [Ar,Br,Cr,s] = algorithm1(A,B,C,r,phi,init,maxiter);
 n = size(A,1);
 
+%% Running IRKA 
+r = 15;
+maxiter = 100;
+init = 10*1i*[1:r]+1i*1e4;
+phi = @(z) (-conj(z));
+[Ar_irka,Br_irka,Cr_irka,~] = algorithm1(A,B,C,r,phi,init,maxiter);
+
 %% Computing systems output trajectories
 dynamics = @(t,x,A,B) A*x+B*sin(2*pi*t);
 [t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(nx,1),[],A,B);
 y1 = C*conj(x');
-[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
+[~,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
+[~,xr_irka] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar_irka,Br_irka);
 y2 = Cr*conj(xr');
-y3 = y1-y2;
+y3 = Cr_irka*conj(xr_irka');
+error = y1-y2;
+error_irka = y1-y3;
 
 %% Plots
 figure()
-set(gcf,'position',[100,100,1100,400])
+set(gcf,'position',[100,100,1100,500])
 subplot(2,1,1)
 plot(t1,real(y1),'r-', 'Linewidth', 3); hold on
-plot(t2,real(y2),'b--', 'Linewidth', 3)
+plot(t1,real(y2),'b--', 'Linewidth', 3)
 plot(t1,imag(y1),'r-.', 'Linewidth', 3);
-plot(t2,imag(y2),'b:', 'Linewidth', 3)
+plot(t1,imag(y2),'b:', 'Linewidth', 3)
+ylim([-1.5,4])
 ax = gca;
 ax.FontSize = 14; 
 legend({'Re$\{y(t)\}$','Re$\{\widehat{y}_r(t)\}$','Im$\{y(t)\}$','Im$\{\widehat{y}_r(t)\}$'},'fontsize',20, 'interpreter','latex', 'Location', 'northeast', 'NumColumns',2)
 subplot(2,1,2)
-plot(t1,abs(y3),'k', 'Linewidth', 1.5)
+semilogy(t1,abs(error),'k', 'Linewidth', 1.5); hold on
+semilogy(t1,abs(error_irka),'k--', 'Linewidth', 1.5)
+ylim([1e-5,1000])
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
+ylabel('$|y(t)-\hat{y}_r(t)|$','fontsize',20, 'interpreter','latex')
+xlabel('time [s]','fontsize',20,'interpreter','latex')
+legend('Algorithm 1', 'IRKA','fontsize',20, 'interpreter','latex', 'Location', 'northeast')
+saveas(gcf,'schroedingerAlgorithm1vsIRKAr15.eps', 'epsc')

@@ -64,8 +64,9 @@ plot(t2,abs(real(y3)),'k', 'Linewidth', 1.5)
 ax = gca;
 ax.FontSize = 14; 
 ylim([0,1.5e-5]);
+xlabel('time [s]','fontsize',20,'interpreter','latex')
 legend('$|y(t)-\widehat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
-
+saveas(gcf,'waver20sine15.eps', 'epsc')
 %% Function for the computation of the interpolation points
 % This function is equal to \phi used to compute the interpolation points 
 % for systems with poles inside a Bernstein ellipse
