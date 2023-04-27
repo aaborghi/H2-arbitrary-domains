@@ -35,10 +35,10 @@ n = size(A,1);
 % dynamicsFOMschroedinger.mat where x and y1 are already computed and just
 % run from line 40 onwards.
 dynamics = @(t,x,A,B) A*x+B*sin(2*pi*t);
-[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(nx,1),[],A,B);
-y1 = C*x';
-[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
-y2 = Cr*xr';
+[t1,x] = ode23(dynamics,linspace(0,10,1000),zeros(nx,1),[],A,B);
+y1 = C*conj(x');
+[t2,xr] = ode23(dynamics,linspace(0,10,1000),zeros(r,1),[],Ar,Br);
+y2 = Cr*conj(xr');
 y3 = y1-y2;
 
 %% Plots
@@ -55,8 +55,7 @@ ax.FontSize = 14;
 legend({'Re$\{y(t)\}$','Re$\{\widehat{y}_r(t)\}$','Im$\{y(t)\}$','Im$\{\widehat{y}_r(t)\}$'},'fontsize',20, 'interpreter','latex', 'Location', 'northeast', 'NumColumns',2)
 subplot(2,1,2)
 plot(t2,abs(y3),'k', 'Linewidth', 1.5)
-ylim([0,0.15])
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}_r(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
+legend('$|y(t)-\hat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
 xlabel('time [s]','fontsize',20,'interpreter','latex')

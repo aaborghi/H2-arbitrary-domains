@@ -33,7 +33,7 @@ n = size(A,1);
 %% Computing systems output trajectories
 dynamics = @(t,x,A,B) A*x+B*sin(2*pi*t);
 [t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(nx,1),[],A,B);
-y1 = C*x';
+y1 = C*conj(x');
 [t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
 y2 = Cr*conj(xr');
 y3 = y1-y2;
@@ -53,4 +53,4 @@ subplot(2,1,2)
 plot(t1,abs(y3),'k', 'Linewidth', 1.5)
 ax = gca;
 ax.FontSize = 14; 
-legend('$|y(t)-\hat{y}_r(t)|$','fontsize',18, 'interpreter','latex', 'Location', 'northwest')
+legend('$|y(t)-\hat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
