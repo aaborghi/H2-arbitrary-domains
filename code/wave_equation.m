@@ -41,11 +41,11 @@ n = size(AA,1);
 init = 0.1 + 100i*randn(r,1);
 [Ar,Br,Cr,s] = algorithm1(AA,BB,CC,r,@phi,init,maxiter);
 
-%% Computing systems output trajectories
-dynamics = @(t,x,A,B) A*x+B*sin(1.5*pi*t);
-[t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(n,1),[],AA,BB);
+%% Computing systems output trajectories for impulse response
+dynamics = @(t,x,A,B) A*x;
+[t1,x] = ode23(dynamics,linspace(0,5,1000),BB,[],AA,BB);
 y1 = CC*x';
-[t2,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
+[t2,xr] = ode23(dynamics,linspace(0,5,1000),Br,[],Ar,Br);
 y2 = Cr*conj(xr');
 y3 = y1-y2;
 
@@ -57,16 +57,16 @@ plot(t1,real(y1),'r-', 'Linewidth', 3); hold on
 plot(t2,real(y2),'b--', 'Linewidth', 3); hold off
 ax = gca;
 ax.FontSize = 14;
-ylim([-15e-3,14e-3]);
+ylim([-2e-2,2e-2]);
 legend('$y(t)$','$\widehat{y}_r(t)$','fontsize',20, 'interpreter','latex', 'Location', 'southeast')
 subplot(2,1,2)
 plot(t2,abs(real(y3)),'k', 'Linewidth', 1.5)
 ax = gca;
 ax.FontSize = 14; 
-ylim([0,1.5e-5]);
+ylim([0,5e-4]);
 xlabel('time [s]','fontsize',20,'interpreter','latex')
 legend('$|y(t)-\widehat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
-saveas(gcf,'waver20sine15.eps', 'epsc')
+saveas(gcf,'waver20impulse.eps', 'epsc')
 %% Function for the computation of the interpolation points
 % This function is equal to \phi used to compute the interpolation points 
 % for systems with poles inside a Bernstein ellipse
