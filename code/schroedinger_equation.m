@@ -40,11 +40,11 @@ phi = @(z) (-conj(z));
 %% Computing systems output trajectories for step repsonse
 dynamics = @(t,x,A,B) A*x+B;
 [t1,x] = ode23(dynamics,linspace(0,5,1000),zeros(nx,1),[],A,B);
-y1 = C*conj(x');
+y1 = C*x.';
 [~,xr] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar,Br);
 [~,xr_irka] = ode23(dynamics,linspace(0,5,1000),zeros(r,1),[],Ar_irka,Br_irka);
-y2 = Cr*conj(xr');
-y3 = Cr_irka*conj(xr_irka');
+y2 = Cr*xr.';
+y3 = Cr_irka*xr_irka.';
 error = y1-y2;
 error_irka = y1-y3;
 
@@ -70,4 +70,3 @@ ax.FontSize = 14;
 ylabel('$|y(t)-\hat{y}_r(t)|$','fontsize',20, 'interpreter','latex')
 xlabel('time [s]','fontsize',20,'interpreter','latex')
 legend('Algorithm 1', 'IRKA','fontsize',20, 'interpreter','latex', 'Location', 'southeast', 'NumColumns',2)
-saveas(gcf,'schroedingerAlgorithm1vsIRKAr15step.eps', 'epsc')

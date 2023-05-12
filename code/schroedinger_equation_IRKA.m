@@ -36,9 +36,9 @@ n = size(A,1);
 % run from line 40 onwards.
 dynamics = @(t,x,A,B) A*x+B*sin(2*pi*t);
 [t1,x] = ode23(dynamics,linspace(0,10,1000),zeros(nx,1),[],A,B);
-y1 = C*conj(x');
+y1 = C*x.';
 [t2,xr] = ode23(dynamics,linspace(0,10,1000),zeros(r,1),[],Ar,Br);
-y2 = Cr*conj(xr');
+y2 = Cr*xr.';
 y3 = y1-y2;
 
 %% Plots

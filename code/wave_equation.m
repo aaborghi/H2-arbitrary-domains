@@ -44,9 +44,9 @@ init = 0.1 + 100i*randn(r,1);
 %% Computing systems output trajectories for impulse response
 dynamics = @(t,x,A,B) A*x;
 [t1,x] = ode23(dynamics,linspace(0,5,1000),BB,[],AA,BB);
-y1 = CC*x';
+y1 = CC*x.';
 [t2,xr] = ode23(dynamics,linspace(0,5,1000),Br,[],Ar,Br);
-y2 = Cr*conj(xr');
+y2 = Cr*xr.';
 y3 = y1-y2;
 
 %% Plots
@@ -66,7 +66,7 @@ ax.FontSize = 14;
 ylim([0,5e-4]);
 xlabel('time [s]','fontsize',20,'interpreter','latex')
 legend('$|y(t)-\widehat{y}_r(t)|$','fontsize',20, 'interpreter','latex', 'Location', 'northwest')
-saveas(gcf,'waver20impulse.eps', 'epsc')
+
 %% Function for the computation of the interpolation points
 % This function is equal to \phi used to compute the interpolation points 
 % for systems with poles inside a Bernstein ellipse
