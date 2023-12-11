@@ -41,7 +41,7 @@ inputu = @(t) exp(-(t-1).^2./0.1)-...
     2*exp(-(t-3).^2./0.01)+2*exp(-(t-3.1).^2./0.01)...
     -2*exp(-(t-7).^2./0.1)+2*exp(-(t-9).^2./0.2);
 dynamics = @(t,x,A,B) A*x+B*inputu(t);
-options = odeset('RelTol',1e-11);
+options = odeset('RelTol',1e-8,'AbsTol',1e-12);
 [t1,x] = ode23(dynamics,linspace(0,10,1000),zeros(nx,1),options,A,B);
 y1 = C*x.';
 [~,xr] = ode23(dynamics,linspace(0,10,1000),zeros(r,1),options,Ar,Br);
