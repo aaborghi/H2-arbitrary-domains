@@ -19,6 +19,6 @@ rom = @(z) (Cr*((psicom(1i.*z)*eye(r)-Ar)\Br)) .* sqrt(dpsi(1i.*z));
 funerror = @(z) (fom(z)-rom(z))*conj(fom(z)-rom(z));
 funfom = @(z) (fom(z)*conj(fom(z)));
 funrom = @(z) (rom(z)*conj(rom(z)));
-abserror = sqrt((1/(2*pi))*integral(funerror,-Inf,Inf,'ArrayValued',true));
-relerror = abserror/sqrt((1/(2*pi))*integral(funfom,-Inf,Inf,'ArrayValued',true));
+abserror = sqrt((1/(2*pi))*integral(funerror,-Inf,Inf,'RelTol',1e-8,'AbsTol',1e-12,'ArrayValued',true));
+relerror = abserror/sqrt((1/(2*pi))*integral(funfom,-Inf,Inf,'RelTol',1e-8,'AbsTol',1e-12,'ArrayValued',true));
 end

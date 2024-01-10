@@ -20,7 +20,7 @@ V = zeros(n,r);
 W = zeros(n,r);
 iter = 0;
 conv_crit = inf;
-conv_tol = 1e-3;
+conv_tol = 1e-6;
 s = init;
 while(conv_crit > conv_tol && iter < maxiter)
     iter = iter+1;   

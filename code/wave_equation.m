@@ -1,5 +1,5 @@
 clear; clc;
-rng(4)
+rng(5)
 
 %% Constructing the discretized wave equation
 nx = 5000;
@@ -38,7 +38,7 @@ R = 1+1e-6;
 M = 1.5e4;
 c = -5e-3;
 n = size(AA,1);
-init = 0.1 + 100i*randn(r,1);
+init = 0.1 + 30i*randn(r,1);
 [Ar,Br,Cr,s] = algorithm1(AA,BB,CC,r,@phi,init,maxiter);
 
 %% Computing systems output trajectories for impulse response
@@ -65,17 +65,16 @@ subplot(2,1,2)
 plot(t2,abs(real(y3)),'k', 'Linewidth', 3)
 ax = gca;
 ax.FontSize = 18; 
-ylim([0,5e-4]);
 xlabel(['\fontsize{14}{0}\selectfont time [s]'],'interpreter','latex')
 ylabel(['\fontsize{14}{0}\selectfont $|y(t)-\hat{y}_r(t)|$'], 'interpreter','latex')
-saveas(gcf,'waver20impulse.eps', 'epsc')
+% saveas(gcf,'waver20impulse.eps', 'epsc')
 %% Function for the computation of the interpolation points
 % This function is equal to \phi used to compute the interpolation points 
 % for systems with poles inside a Bernstein ellipse
 function snew = phi(s)
             R = 1+1e-6;
             M = 1.5e4;
-            c = -1e-3;
+            c = -5e-3;
             true_sqrt = sqrt((-1i*(s-c)/M)^2-1);
             z1 = R/((-1i*(s-c)/M+true_sqrt)/R);
             z1 = c+1i*0.5*M*conj((z1+1/z1));
